@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.JavaScript;
@@ -194,6 +195,10 @@ internal static class TypeExtensions
 
             if (!string.IsNullOrWhiteSpace(referenceTypeFolder))
             {
+                if (referenceTypeFolder.ElementAt(0).Equals('/'))
+                {
+                    referenceTypeFolder = referenceTypeFolder.Remove(0, 1);
+                }
                 ret += referenceTypeFolder + "/";
             }
         }
@@ -207,7 +212,20 @@ internal static class TypeExtensions
 
         if (!noPrefix)
         {
-            url = url.Insert(0, "./");
+           if (url.ElementAt(0).Equals('/'))
+           {
+               url = Path.Join("." , url);
+           }
+           else
+           {
+               url = Path.Combine("./", url);
+           }
+           
+        }
+
+        if (url.Contains("//"))
+        {
+            url = url.Replace("//", "/");
         }
 
         return url;
