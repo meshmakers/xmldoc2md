@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Markdown;
@@ -111,7 +112,7 @@ internal static class MethodBaseExtensions
         string ret = "";
         if (referenceTypeFolder != currentTypeFolder)
         {
-            var y = currentTypeFolder?.Split("/").Length ?? 0;
+            var y = currentTypeFolder?.Split("/").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Length ?? 0;
             for (int i = 0; i < y; i++)
             {
                 ret += "../";
@@ -119,6 +120,10 @@ internal static class MethodBaseExtensions
 
             if (!string.IsNullOrWhiteSpace(referenceTypeFolder))
             {
+                if (referenceTypeFolder.ElementAt(0).Equals('/'))
+                {
+                    referenceTypeFolder = referenceTypeFolder.Remove(0, 1);
+                }
                 ret += referenceTypeFolder + "/";
             }
         }
@@ -132,8 +137,21 @@ internal static class MethodBaseExtensions
 
         if (!noPrefix)
         {
-            url = url.Insert(0, "./");
+            if (url.ElementAt(0).Equals('/'))
+            {
+                url = Path.Join("." , url);
+            }
+            else
+            {
+                url = Path.Combine("./", url);
+            }
         }
+        
+        if (url.Contains("//"))
+        {
+            url = url.Replace("//", "/");
+        }
+
 
         string anchor = methodInfo.GetSignature().ToAnchorLink();
 

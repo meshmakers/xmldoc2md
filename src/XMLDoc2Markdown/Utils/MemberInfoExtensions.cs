@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -125,7 +126,7 @@ internal static class MemberInfoExtensions
         string ret = "";
         if (referenceTypeFolder != currentTypeFolder)
         {
-            var y = currentTypeFolder?.Split("/").Length ?? 0;
+            var y = currentTypeFolder?.Split("/").Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Length ?? 0;
             for (int i = 0; i < y; i++)
             {
                 ret += "../";
@@ -133,6 +134,10 @@ internal static class MemberInfoExtensions
 
             if (!string.IsNullOrWhiteSpace(referenceTypeFolder))
             {
+                if (referenceTypeFolder.ElementAt(0).Equals('/'))
+                {
+                    referenceTypeFolder = referenceTypeFolder.Remove(0, 1);
+                }
                 ret += referenceTypeFolder + "/";
             }
         }
@@ -146,7 +151,19 @@ internal static class MemberInfoExtensions
 
         if (!noPrefix)
         {
-            url = url.Insert(0, "./");
+            if (url.ElementAt(0).Equals('/'))
+            {
+                url = Path.Join("." , url);
+            }
+            else
+            {
+                url = Path.Combine("./", url);
+            }
+        }
+        
+        if (url.Contains("//"))
+        {
+            url = url.Replace("//", "/");
         }
 
         string anchor = memberInfo.Name.ToAnchorLink();
