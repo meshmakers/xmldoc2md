@@ -16,10 +16,7 @@ internal class Program
 {
     private static int Main(string[] args)
     {
-        CommandLineApplication app = new()
-        {
-            Name = "xmldoc2md"
-        };
+        CommandLineApplication app = new() { Name = "xmldoc2md" };
 
         app.VersionOption("-v|--version", () =>
         {
@@ -85,53 +82,55 @@ internal class Program
             {
                 Directory.CreateDirectory(@out);
             }
-
-
-            var x = new AssemblyLoadContext(src, true); 
             
-             Assembly assembly = x
+
+            var assemblyLoadContext = new AssemblyLoadContext(src, true);
+
+            Assembly assembly = assemblyLoadContext
                 .LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(src)));
 
             string assemblyName = assembly.GetName().Name;
             XmlDocumentation documentation = new(src);
             Logger.Info($"Generation started: Assembly: {assemblyName}");
 
+            DocusaurusSerializer.Serialize(@out, new Category { Label = assemblyName });
+
             IMarkdownDocument indexPage = new MarkdownDocument().AppendParagraph("");
             indexPage.AppendHeader(assemblyName, 1);
-            
+
             IEnumerable<Type> types = assembly.GetTypes().Where(type => type.IsPublic);
-            IEnumerable<IGrouping<string, Type>> typesByNamespace = types.GroupBy(type => type.Namespace).OrderBy(g => g.Key);
+            IEnumerable<IGrouping<string, Type>> typesByNamespace =
+                types.GroupBy(type => type.Namespace).OrderBy(g => g.Key);
             int subNamespacePos = 0;
+            
+            
             foreach (IGrouping<string, Type> namespaceTypes in typesByNamespace)
             {
                 indexPage.AppendHeader(namespaceTypes.Key, 2);
-                
-                var folderPath = @out;
-                var relativeFolderPath = assembly.GetSubNamespaceParts(namespaceTypes.Key).ToList();
-                if (relativeFolderPath.Any())
-                {
-                    for (int index = 0; index < relativeFolderPath.Count; index++)
-                    {
-                        string directory = relativeFolderPath[index];
-                        folderPath = Path.Combine(folderPath, directory.ToLower());
-                        if (!Directory.Exists(folderPath))
-                        {
-                            Directory.CreateDirectory(folderPath);
-                        }
 
-                        if (index == 0)
-                        {
-                            DocusaurusSerializer.Serialize(folderPath, new Category{ Label = string.IsNullOrWhiteSpace(directory) ? null : directory, Position = subNamespacePos++});
-                        }
-                        else if (!string.IsNullOrWhiteSpace(directory))
-                        {
-                            DocusaurusSerializer.Serialize(folderPath, new Category{ Label = directory});
-                        }
+                var folderPath = @out;
+                var relativeFolderPath = namespaceTypes.Key;
+                if (relativeFolderPath.StartsWith(assemblyName))
+                {
+                    relativeFolderPath = relativeFolderPath.Replace(assemblyName, "");
+                    if (relativeFolderPath.StartsWith("."))
+                    {
+                        relativeFolderPath = relativeFolderPath.Substring(1);
                     }
                 }
-                else
+
+                if (!string.IsNullOrWhiteSpace(relativeFolderPath))
                 {
-                    DocusaurusSerializer.Serialize(folderPath, new Category{ Label = assembly.GetRootNamespace()});
+                    relativeFolderPath = relativeFolderPath.Replace(".", "_").ToLower();
+
+                    folderPath = Path.Combine(folderPath, relativeFolderPath);
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
+
+                    DocusaurusSerializer.Serialize(folderPath,
+                        new Category { Label = namespaceTypes.Key.Replace(assemblyName + ".", ""), Position = subNamespacePos++ });
                 }
 
                 foreach (Type type in namespaceTypes.OrderBy(x => x.Name))
@@ -139,7 +138,8 @@ internal class Program
                     var fileName = type.GetDocsFileName(false);
                     Logger.Info($"  {fileName}.md");
 
-                    indexPage.AppendParagraph(type.GetDocsLink(assembly, assembly.GetRootNamespace(), noExtension: options.GitHubPages));
+                    indexPage.AppendParagraph(type.GetDocsLink(assembly, assembly.GetAssemblyName(),
+                        noExtension: options.GitHubPages));
 
                     try
                     {

@@ -11,48 +11,35 @@ internal static class AssemblyExtensions
         return assembly.GetTypes().Select(type => type.Namespace).Distinct();
     }
 
-    internal static string GetRootNamespace(this Assembly assembly)
+    internal static string GetAssemblyName(this Assembly assembly)
     {
-        var namespaces = assembly.GetTypes()
-            .Where(t => t.Namespace != null)
-            .Select(t => t.Namespace)
-            .GroupBy(ns => ns);
-
-        return namespaces.First().Key;
+        return assembly.GetName().Name;
     }
     
     internal static string GetSubNamespace(this Assembly assembly, string @namespace)
     {
         RequiredArgument.NotNull(assembly, nameof(assembly));
 
-        var rootNamespace = assembly.GetRootNamespace();
+        var rootNamespace = assembly.GetAssemblyName();
         var subNamespace = @namespace.Replace(rootNamespace, "");
         if (string.IsNullOrWhiteSpace(subNamespace))
         {
             return null;
         }
-
-        return subNamespace.Substring(0);
-    }
-    
-    internal static IEnumerable<string> GetSubNamespaceParts(this Assembly assembly, string @namespace)
-    {
-        RequiredArgument.NotNull(assembly, nameof(assembly));
-
-        var rootNamespace = assembly.GetRootNamespace();
-        var subNamespace = @namespace.Replace(rootNamespace, "");
-        if (string.IsNullOrWhiteSpace(subNamespace))
+        
+        if (subNamespace.StartsWith("."))
         {
-            return new List<string>();
+            return subNamespace.Substring(1);
         }
 
-        return subNamespace.Substring(0).Split(".");
+        return subNamespace;
     }
+    
     
     internal static string GetRelativeFolderPath(this Assembly assembly, string @namespace)
     {
         RequiredArgument.NotNull(assembly, nameof(assembly));
 
-        return assembly.GetSubNamespace(@namespace)?.Replace(".", "/").ToLower();
+        return assembly.GetSubNamespace(@namespace)?.Replace(".", "_").ToLower();
     }
 }

@@ -2,7 +2,15 @@
   "profiles": {
     "XMLDoc2Markdown": {
         "commandName": "Project",
-        "commandLineArgs": "../../../../../sample/MyClassLib/bin/Debug/netstandard2.0/MyClassLib.dll ../../../../../docs/sample --examples-path ../../../../../sample/docs/examples --github-pages --back-button"
+        "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Communication.Contracts/bin/DebugL/net8.0/Meshmakers.Octo.Communication.Contracts.dll ../../../../../docs/Communication.Contracts --examples-path ../../../../../sample/docs/examples --github-pages"
+    },
+    "XMLDoc2Markdown2": {
+      "commandName": "Project",
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.ServiceClient/bin/DebugL/net8.0/Meshmakers.Octo.Sdk.ServiceClient.dll ../../../../../docs/Sdk.ServiceClient --examples-path ../../../../../sample/docs/examples --github-pages"
+    },
+    "XMLDoc2Markdown3": {
+      "commandName": "Project",
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common/bin/DebugL/net8.0/Meshmakers.Octo.Sdk.Common.dll ../../../../../docs/Sdk.Common --examples-path ../../../../../sample/docs/examples --github-pages"
     }
   }
 }

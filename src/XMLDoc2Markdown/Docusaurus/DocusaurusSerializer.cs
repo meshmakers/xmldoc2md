@@ -10,17 +10,14 @@ internal static class DocusaurusSerializer
     public static void Serialize(string folderPath, Category category)
     {
         var filePath = Path.Combine(folderPath, "_category_.json");
-        
-        using (var sw = new StreamWriter(filePath))
+
+        using var sw = new StreamWriter(filePath);
+        var serializeOptions = new JsonSerializerOptions
         {
-            var serializeOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-                WriteIndented = true
-            };
-            JsonSerializer.Serialize(sw.BaseStream, category,serializeOptions);
-        }
-     
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+            WriteIndented = true
+        };
+        JsonSerializer.Serialize(sw.BaseStream, category,serializeOptions);
     }
 }
