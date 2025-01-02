@@ -525,9 +525,7 @@ public class TypeDocumentation
 
             MarkdownParagraph summary = this.XNodesToMarkdownParagraph(nodes);
             string formattedSummary = TableFormat(summary.ToString());
-            var name = $"<a id=\"{field.Name.ToLower()}\"></a>{field.Name}";
-
-            table.AddRow(new MarkdownTableRow(name, ((Enum)Enum.Parse(this.type, field.Name)).ToString("D"), formattedSummary));
+            table.AddRow(new MarkdownTableRow(field.Name, ((Enum)Enum.Parse(this.type, field.Name)).ToString("D"), formattedSummary));
         }
 
         this.document.Append(table);

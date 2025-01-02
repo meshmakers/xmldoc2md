@@ -166,8 +166,12 @@ internal static class MemberInfoExtensions
             url = url.Replace("//", "/");
         }
 
-        string anchor = memberInfo.Name.ToAnchorLink();
+        if (type.IsEnum) // we do not add an anchor for enums, because not supported in docusaurus
+        {
+            return url;
+        }
 
+        string anchor = memberInfo.Name.ToAnchorLink();
         return $"{url}#{anchor}";
     }
 
@@ -180,10 +184,10 @@ internal static class MemberInfoExtensions
         {
             Type type => type.GetDocsLink(assembly, currentNamespace, text, noExtension, noPrefix),
             MethodBase method => method.GetDocsLink(assembly, currentNamespace, text, noExtension, noPrefix),
-            _ => getDocsLinkBase(memberInfo, assembly, currentNamespace, text, noExtension, noPrefix),
+            _ => GetDocsLinkBase(memberInfo, assembly, currentNamespace, text, noExtension, noPrefix),
         };
 
-        static MarkdownInlineElement getDocsLinkBase(MemberInfo memberInfo, Assembly assembly, string currentNamespace, string text = null, bool noExtension = false, bool noPrefix = false)
+        static MarkdownInlineElement GetDocsLinkBase(MemberInfo memberInfo, Assembly assembly, string currentNamespace, string text = null, bool noExtension = false, bool noPrefix = false)
         {
             Type declaringType = memberInfo.DeclaringType;
 
