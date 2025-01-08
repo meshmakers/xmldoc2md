@@ -1,6 +1,6 @@
 name: $(GitVersion.FullSemVer)
 pool:
-  vmImage: 'ubuntu-latest'
+  name: Gerald-Local-Linux
 
 variables:
   buildConfiguration: Release
