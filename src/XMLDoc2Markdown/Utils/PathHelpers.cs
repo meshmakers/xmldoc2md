@@ -8,15 +8,18 @@ internal static class PathHelpers
 {
     private static string GetDotNetRootPath()
     {
+        
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),"dotnet");
         }
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || 
-            RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            return "/usr/share/dotnet";
+            return "/usr/lib/dotnet/";
+        }
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            return "/usr/local/share/dotnet/";
         }
 
         throw new PlatformNotSupportedException("Unsupported operating system.");

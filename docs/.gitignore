@@ -1,2 +1,4 @@
 Sdk.Common/
+Sdk.Common.Web/
+Sdk.ServiceClient/
 Communication.Contracts/
