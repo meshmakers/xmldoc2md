@@ -21,7 +21,8 @@ public class TypeDocumentation
     private readonly TypeDocumentationOptions options;
     private readonly IMarkdownDocument document = new MarkdownDocument();
 
-    public TypeDocumentation(Assembly assembly, Type type, XmlDocumentation documentation, TypeDocumentationOptions options = null)
+    public TypeDocumentation(Assembly assembly, Type type, XmlDocumentation documentation,
+        TypeDocumentationOptions options = null)
     {
         RequiredArgument.NotNull(assembly, nameof(assembly));
         RequiredArgument.NotNull(type, nameof(type));
@@ -38,7 +39,7 @@ public class TypeDocumentation
         this.document.AppendHorizontalRule();
         this.document.AppendParagraph($"title: {this.type.GetDisplayName()}");
         this.document.AppendHorizontalRule();
-        
+
         if (this.options.BackButton)
         {
             this.WriteBackButton(top: true);
@@ -75,10 +76,11 @@ public class TypeDocumentation
         this.WriteMembersDocumentation(this.GetConstructors());
         this.WriteMembersDocumentation(
             this.type
-                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly)
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static |
+                            BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => !m.IsPrivate || this.options.IncludePrivateMembers)
-            );
+        );
         this.WriteMembersDocumentation(this.GetEvents());
 
         bool example = this.WriteExample(this.type);
@@ -129,7 +131,7 @@ public class TypeDocumentation
             lines.Add($"Inheritance {string.Join(" → ", inheritanceHierarchy)}");
         }
 
-        Type[] interfaces = this.type.GetInterfaces().Where(i=> i.IsPublic).ToArray();
+        Type[] interfaces = this.type.GetInterfaces().Where(i => i.IsPublic).ToArray();
         if (interfaces.Length > 0)
         {
             IEnumerable<MarkdownInlineElement> implements = interfaces
@@ -158,7 +160,8 @@ public class TypeDocumentation
         WriteObsolete(attribute, this.document, "This member is obsolete.");
     }
 
-    private static void WriteObsolete(IEnumerable<ObsoleteAttribute> attribute, IMarkdownDocument document, string defaultMessage)
+    private static void WriteObsolete(IEnumerable<ObsoleteAttribute> attribute, IMarkdownDocument document,
+        string defaultMessage)
     {
         if (attribute.Any())
         {
@@ -173,6 +176,7 @@ public class TypeDocumentation
             {
                 document.AppendParagraph(message);
             }
+
             document.AppendHorizontalRule();
         }
     }
@@ -201,7 +205,8 @@ public class TypeDocumentation
     {
         return element.Name.ToString() switch
         {
-            "see" => this.GetLinkFromReference(element.Attribute("cref")?.Value ?? element.Attribute("href")?.Value, element.Value),
+            "see" => this.GetLinkFromReference(element.Attribute("cref")?.Value ?? element.Attribute("href")?.Value,
+                element.Value),
             "seealso" => this.GetLinkFromReference(element.Attribute("cref")?.Value, element.Value),
             "c" => new MarkdownInlineCode(element.Value),
             "br" => new MarkdownText("<br/>"),
@@ -236,8 +241,10 @@ public class TypeDocumentation
                     break;
                 }
             }
+
             return indent;
         }
+
         static string reindentLine(string line, int indent)
         {
             string result = string.Empty;
@@ -249,8 +256,10 @@ public class TypeDocumentation
                     break;
                 }
             }
+
             return line[i..];
         }
+
         int indent = getIndent(code);
 
         IEnumerable<string> lines = code
@@ -276,6 +285,7 @@ public class TypeDocumentation
             {
                 continue;
             }
+
             switch (element)
             {
                 case MarkdownInlineElement inlineElement:
@@ -287,6 +297,7 @@ public class TypeDocumentation
                     {
                         paragraph.Append(inlineElement);
                     }
+
                     break;
 
                 case IMarkdownBlockElement block:
@@ -295,6 +306,7 @@ public class TypeDocumentation
                         blocks.Add(new MarkdownParagraph(paragraph));
                         paragraph = null;
                     }
+
                     blocks.Add(block);
                     break;
             }
@@ -312,7 +324,8 @@ public class TypeDocumentation
     {
         return node switch
         {
-            XText text => new MarkdownText(Regex.Replace(text.ToString(), "[ ]{2,}", " ")),
+            XText text => new MarkdownText(Regex.Replace(text.ToString().Replace("{", "\\{").Replace("}", "\\}"),
+                "[ ]{2,}", " ")),
             XElement element => this.XElementToMarkdown(element),
             _ => null
         };
@@ -395,6 +408,7 @@ public class TypeDocumentation
             {
                 log += " (documented)";
             }
+
             if (example)
             {
                 log += " (example)";
@@ -412,6 +426,7 @@ public class TypeDocumentation
         {
             return;
         }
+
         this.document.AppendHeader("Exceptions", 4);
 
         foreach (XElement exceptionDoc in exceptionDocs)
@@ -420,7 +435,8 @@ public class TypeDocumentation
             MarkdownInlineElement exceptionTypeName = this.GetLinkFromReference(cref);
             MarkdownParagraph exceptionSummary = this.XNodesToMarkdownParagraph(exceptionDoc.Nodes());
 
-            this.document.AppendParagraph(string.Join($"<br/>{Environment.NewLine}", exceptionTypeName, exceptionSummary));
+            this.document.AppendParagraph(string.Join($"<br/>{Environment.NewLine}", exceptionTypeName,
+                exceptionSummary));
         }
     }
 
@@ -464,10 +480,12 @@ public class TypeDocumentation
                 this.type.Assembly, this.type.Namespace,
                 noExtension: this.options.GitHubPages || this.options.GitlabWiki,
                 noPrefix: this.options.GitlabWiki);
-            IEnumerable<XNode> nodes = memberDocElement?.Elements("typeparam").FirstOrDefault(e => e.Attribute("name")?.Value == typeParam.Name)?.Nodes();
+            IEnumerable<XNode> nodes = memberDocElement?.Elements("typeparam")
+                .FirstOrDefault(e => e.Attribute("name")?.Value == typeParam.Name)?.Nodes();
             MarkdownParagraph typeParamDoc = this.XNodesToMarkdownParagraph(nodes);
 
-            this.document.AppendParagraph(string.Join($"<br/>{Environment.NewLine}", new MarkdownInlineCode(typeName), typeParamDoc));
+            this.document.AppendParagraph(string.Join($"<br/>{Environment.NewLine}", new MarkdownInlineCode(typeName),
+                typeParamDoc));
         }
     }
 
@@ -490,10 +508,12 @@ public class TypeDocumentation
                 this.type.Assembly, this.type.Namespace,
                 noExtension: this.options.GitHubPages || this.options.GitlabWiki,
                 noPrefix: this.options.GitlabWiki);
-            IEnumerable<XNode> nodes = memberDocElement?.Elements("param").FirstOrDefault(e => e.Attribute("name")?.Value == param.Name)?.Nodes();
+            IEnumerable<XNode> nodes = memberDocElement?.Elements("param")
+                .FirstOrDefault(e => e.Attribute("name")?.Value == param.Name)?.Nodes();
             MarkdownParagraph paramDoc = this.XNodesToMarkdownParagraph(nodes);
 
-            this.document.AppendParagraph($"{new MarkdownInlineCode(param.Name)} {typeName}<br/>{Environment.NewLine}{paramDoc}");
+            this.document.AppendParagraph(
+                $"{new MarkdownInlineCode(param.Name)} {typeName}<br/>{Environment.NewLine}{paramDoc}");
         }
     }
 
@@ -505,6 +525,7 @@ public class TypeDocumentation
         {
             return;
         }
+
         this.document.AppendHeader("Fields", 2);
 
         MarkdownTableHeader header = new(
@@ -525,7 +546,8 @@ public class TypeDocumentation
 
             MarkdownParagraph summary = this.XNodesToMarkdownParagraph(nodes);
             string formattedSummary = TableFormat(summary.ToString());
-            table.AddRow(new MarkdownTableRow(field.Name, ((Enum)Enum.Parse(this.type, field.Name)).ToString("D"), formattedSummary));
+            table.AddRow(new MarkdownTableRow(field.Name, ((Enum)Enum.Parse(this.type, field.Name)).ToString("D"),
+                formattedSummary));
         }
 
         this.document.Append(table);
@@ -610,17 +632,18 @@ public class TypeDocumentation
             if (type is not null)
             {
                 memberInfo = type.GetMember($"{methodSignature}*")
-                            .FirstOrDefault(info =>
-                    {
-                        MethodBase methodBase = (MethodBase)info;
-                        if (methodBase.ContainsGenericParameters
-                            && methodBase.GetGenericArguments().Length != genericCount)
-                        {
-                            return false;
-                        }
-                        return methodBase.GetParameters().Length == parameterCount;
-                    }) ??
-                    type.GetMember($"{methodSignature}*").FirstOrDefault();
+                                 .FirstOrDefault(info =>
+                                 {
+                                     MethodBase methodBase = (MethodBase)info;
+                                     if (methodBase.ContainsGenericParameters
+                                         && methodBase.GetGenericArguments().Length != genericCount)
+                                     {
+                                         return false;
+                                     }
+
+                                     return methodBase.GetParameters().Length == parameterCount;
+                                 }) ??
+                             type.GetMember($"{methodSignature}*").FirstOrDefault();
             }
         }
         else if (memberType is MemberTypes.Event or MemberTypes.Field or MemberTypes.Property)
@@ -644,7 +667,8 @@ public class TypeDocumentation
         return memberInfo != null;
     }
 
-    private static (string @namespace, string methodName, int genericCount, int parameterCount) DeconstructMember(string input)
+    private static (string @namespace, string methodName, int genericCount, int parameterCount)
+        DeconstructMember(string input)
     {
         int genericIndex = input.IndexOf("``");
         int parameterIndex = input.IndexOf("(");
@@ -662,6 +686,7 @@ public class TypeDocumentation
             parameterCount = input[parameterIndex..].Split(',').Count();
             methodName = input[(lastDotIndex + 1)..parameterIndex];
         }
+
         if (genericIndex > -1)
         {
             genericCount = parameterIndex > 1
@@ -677,7 +702,8 @@ public class TypeDocumentation
     {
         if (this.options.IncludePrivateMembers)
         {
-            return this.type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+            return this.type
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
                 .Where(x => !x.Name.EndsWith(BackingFieldName));
         }
 
@@ -688,7 +714,8 @@ public class TypeDocumentation
     {
         if (this.options.IncludePrivateMembers)
         {
-            return this.type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            return this.type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                           BindingFlags.Static);
         }
 
         return this.type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
@@ -698,7 +725,8 @@ public class TypeDocumentation
     {
         if (this.options.IncludePrivateMembers)
         {
-            return this.type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            return this.type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                             BindingFlags.Static);
         }
 
         return this.type.GetConstructors(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
@@ -708,7 +736,8 @@ public class TypeDocumentation
     {
         if (this.options.IncludePrivateMembers)
         {
-            return this.type.GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            return this.type.GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
+                                       BindingFlags.Static);
         }
 
         return this.type.GetEvents(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);

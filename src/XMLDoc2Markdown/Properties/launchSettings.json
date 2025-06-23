@@ -15,6 +15,10 @@
     "XMLDoc2Markdown4": {
       "commandName": "Project",
       "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common.Web/bin/DebugL/net9.0/Meshmakers.Octo.Sdk.Common.Web.dll ../../../../../docs/Sdk.Common.Web --examples-path ../../../../../sample/docs/examples --github-pages"
+    },
+    "XMLDoc2Markdown-MeshAdapter": {
+      "commandName": "Project",
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-mesh-adapter/bin/DebugL/net9.0/Meshmakers.Octo.MeshAdapter.Nodes.dll ../../../../../docs/Meshmakers.Octo.MeshAdapter.Nodes --examples-path ../../../../../sample/docs/examples --github-pages"
     }
   }
 }
