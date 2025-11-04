@@ -33,12 +33,20 @@ internal static class PathHelpers
         return fullPath;
     }
 
+    internal static string GetNetCoreSharedPath()
+    {
+        string dotnetPath = GetDotNetRootPath();
+        string netCorePath = Path.Combine(dotnetPath, "shared", "Microsoft.NETCore.App");
+        string fullPath = Path.Combine(netCorePath, GetVersionDirectoryName(netCorePath));
+        return fullPath;
+    }
+
     private static string GetVersionDirectoryName(string aspNetPath)
     {
-        string[] versions = Directory.GetDirectories(aspNetPath, "8.0.*");
+        string[] versions = Directory.GetDirectories(aspNetPath, "*.*.*");
         if (versions.Length == 0)
         {
-            throw new DirectoryNotFoundException("No directory found starting with 8.0.");
+            throw new DirectoryNotFoundException("No version directory found.");
         }
 
         Array.Sort(versions);

@@ -213,6 +213,10 @@ public class TypeDocumentation
             "para" => this.XNodesToMarkdownParagraph(element.Nodes()),
             "example" => this.XNodesToMarkdownParagraph(element.Nodes()),
             "code" => new MarkdownCode("csharp", TypeDocumentation.FormatCodeElementValue(element.Value)),
+            "list" => this.XNodesToMarkdownParagraph(element.Nodes()),
+            "item" => this.XNodesToMarkdownParagraph(element.Nodes()),
+            "term" => this.XNodesToMarkdownParagraph(element.Nodes()),
+            "description" => this.XNodesToMarkdownParagraph(element.Nodes()),
             _ => new MarkdownText(element.Value)
         };
     }

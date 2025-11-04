@@ -26,6 +26,7 @@ internal class AssemblyLoadContext : System.Runtime.Loader.AssemblyLoadContext
             [
                 Path.GetDirectoryName(this._pluginPath),
                 PathHelpers.GetAspNetCoreSharedPath(),
+                PathHelpers.GetNetCoreSharedPath(),
                 AppDomain.CurrentDomain.BaseDirectory
             ];
 
