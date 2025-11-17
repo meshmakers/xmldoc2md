@@ -2,23 +2,23 @@
   "profiles": {
     "XMLDoc2Markdown": {
         "commandName": "Project",
-        "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Communication.Contracts/bin/DebugL/net9.0/Meshmakers.Octo.Communication.Contracts.dll ../../../../../docs/Communication.Contracts --examples-path ../../../../../sample/docs/examples --github-pages"
+        "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Communication.Contracts/bin/DebugL/net10.0/Meshmakers.Octo.Communication.Contracts.dll ../../../../../docs/Communication.Contracts --examples-path ../../../../../sample/docs/examples --github-pages"
     },
     "XMLDoc2Markdown2": {
       "commandName": "Project",
-      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.ServiceClient/bin/DebugL/net9.0/Meshmakers.Octo.Sdk.ServiceClient.dll ../../../../../docs/Sdk.ServiceClient --examples-path ../../../../../sample/docs/examples --github-pages"
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.ServiceClient/bin/DebugL/net10.0/Meshmakers.Octo.Sdk.ServiceClient.dll ../../../../../docs/Sdk.ServiceClient --examples-path ../../../../../sample/docs/examples --github-pages"
     },
     "XMLDoc2Markdown3": {
       "commandName": "Project",
-      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common/bin/DebugL/net9.0/Meshmakers.Octo.Sdk.Common.dll ../../../../../docs/Sdk.Common --examples-path ../../../../../sample/docs/examples --github-pages"
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common/bin/DebugL/net10.0/Meshmakers.Octo.Sdk.Common.dll ../../../../../docs/Sdk.Common --examples-path ../../../../../sample/docs/examples --github-pages"
     },
     "XMLDoc2Markdown4": {
       "commandName": "Project",
-      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common.Web/bin/DebugL/net9.0/Meshmakers.Octo.Sdk.Common.Web.dll ../../../../../docs/Sdk.Common.Web --examples-path ../../../../../sample/docs/examples --github-pages"
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-sdk/src/Sdk.Common.Web/bin/DebugL/net10.0/Meshmakers.Octo.Sdk.Common.Web.dll ../../../../../docs/Sdk.Common.Web --examples-path ../../../../../sample/docs/examples --github-pages"
     },
     "XMLDoc2Markdown-MeshAdapter": {
       "commandName": "Project",
-      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-mesh-adapter/bin/DebugL/net9.0/Meshmakers.Octo.MeshAdapter.Nodes.dll ../../../../../docs/Meshmakers.Octo.MeshAdapter.Nodes --examples-path ../../../../../sample/docs/examples --github-pages"
+      "commandLineArgs": "/Users/gerald/RiderProjects/meshmakers/octo-mesh-adapter/bin/DebugL/net10.0/Meshmakers.Octo.MeshAdapter.Nodes.dll ../../../../../docs/Meshmakers.Octo.MeshAdapter.Nodes --examples-path ../../../../../sample/docs/examples --github-pages"
     }
   }
 }
