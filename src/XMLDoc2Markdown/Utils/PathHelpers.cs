@@ -8,6 +8,12 @@ internal static class PathHelpers
 {
     private static string GetDotNetRootPath()
     {
+        // Check if environment variable DOTNET_ROOT_X64 is set
+        string dotnetRoot = Environment.GetEnvironmentVariable("DOTNET_ROOT_X64");
+        if (!string.IsNullOrEmpty(dotnetRoot))
+        {
+            return dotnetRoot;
+        }
         
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
