@@ -144,7 +144,13 @@ internal static class TypeExtensions
 
         if (genericParams.Length > 0)
         {
-            name = name[..name.IndexOf('`')];
+            // Nested types of a generic outer (e.g. Dictionary<TKey,TValue>+KeyCollection)
+            // inherit GenericTypeArguments from the outer but have no backtick in their own name.
+            int backtickIndex = name.IndexOf('`');
+            if (backtickIndex >= 0)
+            {
+                name = name[..backtickIndex];
+            }
             name += $"<{string.Join(", ", genericParams.Select(t => t.GetDisplayName(simplifyName)))}>";
         }
 
