@@ -244,7 +244,11 @@ internal static class TypeExtensions
             return true;
         }
 
-        if (type.IsArray)
+        // out/ref parameters are ByRef wrappers (T&), arrays are T[] — in both cases the
+        // generic-ness lives on the element type, so unwrap one level before checking.
+        // Without the ByRef case an "out T value" parameter is mistaken for a real type and
+        // linked to a non-existent page (e.g. [T](./t.md)).
+        if (type.IsArray || type.IsByRef)
         {
             var elementType = type.GetElementType();
             if (elementType != null)
@@ -293,7 +297,9 @@ internal static class TypeExtensions
                 return new MarkdownLink(text, type.GetMSDocsUrl());
             }
 
-            if (type.Assembly == assembly)
+            // Only public types get a generated page (see Program.cs: GetTypes().Where(t => t.IsPublic)).
+            // Linking an internal (or nested) type produces a dangling link, so render those as plain text.
+            if (type.Assembly == assembly && type.IsPublic)
             {
                 return new MarkdownLink(text, type.GetInternalDocsUrl(currentNamespace, noExtension, noPrefix));
             }
