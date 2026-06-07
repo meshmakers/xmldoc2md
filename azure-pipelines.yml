@@ -16,6 +16,14 @@ trigger:
       - README.md
 
 steps:
+  # GitVersion needs the full history + tags to compute a version. The default
+  # checkout is a shallow (--depth=1) clone, which makes GitVersion fail with
+  # "Cannot find commit ... ensure the repository is an unshallow clone". Fetch
+  # the entire history and tags first.
+  - checkout: self
+    fetchDepth: 0
+    fetchTags: true
+
   - task: gitversion/setup@0
     displayName: Install GitVersion
     inputs:
