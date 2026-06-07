@@ -3,7 +3,11 @@ pool:
   name: meshmakers-ci-agents
 
 variables:
-  buildConfiguration: Release
+  # Shared variable group that holds the NuGet API keys (NugetPublicApiKey etc.),
+  # same group the other meshmakers pipelines (mm-common, octo-sdk) use.
+  - group: ApiKeys-mm-cloud
+  - name: buildConfiguration
+    value: Release
 
 trigger:
   batch: true
@@ -45,5 +49,6 @@ steps:
       custom: nuget
       arguments: >
         push $(Build.ArtifactStagingDirectory)/**/*.nupkg
+        --skip-duplicate
         -s https://api.nuget.org/v3/index.json
-        -k $(NuGetApiKey)           
+        -k $(NugetPublicApiKey)           
