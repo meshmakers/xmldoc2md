@@ -1,8 +1,14 @@
+---
+
+title: GenericClass<T>
+
+---
+
 [`< Back`](./)
 
 ---
 
-# GenericClass&lt;T&gt;
+# GenericClass\<T\>
 
 Namespace: MyClassLib.SubNamespace
 
@@ -14,16 +20,16 @@ public class GenericClass<T>
 
 #### Type Parameters
 
-`T`<br>
+`T`<br/>
 The type param.
 
-Inheritance [Object](https://docs.microsoft.com/en-us/dotnet/api/system.object) → [GenericClass&lt;T&gt;](./myclasslib.subnamespace.genericclass-1)
+Inheritance [Object](https://learn.microsoft.com/en-us/dotnet/api/system.object) → [GenericClass\<T\>](./genericclass-1)
 
 ## Constructors
 
 ### **GenericClass()**
 
-Initializes a new instance of the [GenericClass&lt;T&gt;](./myclasslib.subnamespace.genericclass-1) class.
+Initializes a new instance of the [GenericClass\<T\>](./genericclass-1) class.
 
 ```csharp
 public GenericClass()
@@ -31,7 +37,7 @@ public GenericClass()
 
 ### **GenericClass(T)**
 
-Initializes a new instance of the [GenericClass&lt;T&gt;](./myclasslib.subnamespace.genericclass-1) class.
+Initializes a new instance of the [GenericClass\<T\>](./genericclass-1) class.
 
 ```csharp
 public GenericClass(T param)
@@ -39,12 +45,12 @@ public GenericClass(T param)
 
 #### Parameters
 
-`param` T<br>
+`param` T<br/>
 The generic parameter.
 
 ## Methods
 
-### **GetGenericInstance&lt;TSource&gt;()**
+### **GetGenericInstance\<TSource\>()**
 
 Gets a new instance of generic param.
 
@@ -54,15 +60,15 @@ public TSource GetGenericInstance<TSource>()
 
 #### Type Parameters
 
-`TSource`<br>
+`TSource`<br/>
 The generic param.
 
 #### Returns
 
-TSource<br>
+TSource<br/>
 The new instance.
 
-### **GetGenericInstance&lt;TSource&gt;(TSource)**
+### **GetGenericInstance\<TSource\>(TSource)**
 
 Gets a new instance of generic param.
 
@@ -72,20 +78,20 @@ public TSource GetGenericInstance<TSource>(TSource source)
 
 #### Type Parameters
 
-`TSource`<br>
+`TSource`<br/>
 The generic param.
 
 #### Parameters
 
-`source` TSource<br>
+`source` TSource<br/>
 The object source.
 
 #### Returns
 
-TSource<br>
+TSource<br/>
 The new instance.
 
-### **Map&lt;TSource, TTarget&gt;(TSource, TTarget)**
+### **Map\<TSource, TTarget\>(TSource, TTarget)**
 
 Map object.
 
@@ -95,23 +101,23 @@ public TTarget Map<TSource, TTarget>(TSource source, TTarget target)
 
 #### Type Parameters
 
-`TSource`<br>
+`TSource`<br/>
 The source type.
 
-`TTarget`<br>
+`TTarget`<br/>
 The source target.
 
 #### Parameters
 
-`source` TSource<br>
+`source` TSource<br/>
 The object source.
 
-`target` TTarget<br>
+`target` TTarget<br/>
 The target
 
 #### Returns
 
-TTarget<br>
+TTarget<br/>
 The mapped object.
 
 ---

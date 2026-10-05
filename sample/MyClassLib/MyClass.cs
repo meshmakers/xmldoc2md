@@ -125,6 +125,20 @@ namespace MyClassLib
         { }
 
         /// <summary>
+        /// Text with characters that are markup in Markdown or MDX but plain text in XML doc:
+        /// the CLR arity name List`1, the generic IList&lt;T&gt;, a JSX-like &lt;T&gt; and braces {x}.
+        /// </summary>
+        /// <remarks>
+        /// Inline code may contain a backtick <c>List`1</c>, start with one <c>`quoted`</c>,
+        /// use braces <c>{ "a": 1 }</c> or chevrons <c>IReadOnlyList&lt;T&gt;</c>.
+        /// References: <paramref name="count" /> and <typeparamref name="TItem" />.
+        /// </remarks>
+        /// <typeparam name="TItem">The item type.</typeparam>
+        /// <param name="count">How many items.</param>
+        /// <returns>Nothing useful.</returns>
+        public TItem[] MarkupLikeText<TItem>(int count) => new TItem[count];
+
+        /// <summary>
         /// A private method.
         /// </summary>
         private void PrivateWork()

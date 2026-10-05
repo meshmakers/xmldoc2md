@@ -210,7 +210,9 @@ public class TypeDocumentation
             "see" => this.GetLinkFromReference(element.Attribute("cref")?.Value ?? element.Attribute("href")?.Value,
                 element.Value),
             "seealso" => this.GetLinkFromReference(element.Attribute("cref")?.Value, element.Value),
-            "c" => new MarkdownInlineCode(element.Value),
+            "c" => new MarkdownText(element.Value.ToInlineCode()),
+            "paramref" => new MarkdownText((element.Attribute("name")?.Value ?? string.Empty).ToInlineCode()),
+            "typeparamref" => new MarkdownText((element.Attribute("name")?.Value ?? string.Empty).ToInlineCode()),
             "br" => new MarkdownText("<br/>"),
             "para" => this.XNodesToMarkdownParagraph(element.Nodes()),
             "example" => this.XNodesToMarkdownParagraph(element.Nodes()),
@@ -219,7 +221,7 @@ public class TypeDocumentation
             "item" => this.XNodesToMarkdownParagraph(element.Nodes()),
             "term" => this.XNodesToMarkdownParagraph(element.Nodes()),
             "description" => this.XNodesToMarkdownParagraph(element.Nodes()),
-            _ => new MarkdownText(element.Value)
+            _ => new MarkdownText(element.Value.FormatChevrons().EscapeMarkdownText())
         };
     }
 
@@ -330,8 +332,7 @@ public class TypeDocumentation
     {
         return node switch
         {
-            XText text => new MarkdownText(Regex.Replace(text.ToString().Replace("{", "\\{").Replace("}", "\\}"),
-                "[ ]{2,}", " ")),
+            XText text => new MarkdownText(Regex.Replace(text.ToString().EscapeMarkdownText(), "[ ]{2,}", " ")),
             XElement element => this.XElementToMarkdown(element),
             _ => null
         };
