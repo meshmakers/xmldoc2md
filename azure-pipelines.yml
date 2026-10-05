@@ -42,8 +42,13 @@ steps:
     artifact: out
     displayName: 'Publish artifact'
 
+  # Only master publishes. Without this condition every PR validation build
+  # pushed its GitVersion prerelease (e.g. 3.1.41-pullrequest0002.2) to the
+  # public feed. `dotnet tool update -g` ignores prereleases, so nothing broke,
+  # but the feed collected noise.
   - task: DotNetCoreCLI@2
     displayName: Push Nuget Package
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     inputs:
       command: custom
       custom: nuget
